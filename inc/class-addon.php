@@ -219,7 +219,7 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
                     continue;
                 }
 
-                if ($feed['meta']['reminderDate'] !== date('m/d/Y')) {
+                if (strtotime($feed['meta']['reminderDate']) > strtotime(date('Y-m-d'))) {
                     continue;
                 }
 
