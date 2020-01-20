@@ -71,6 +71,7 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
      * Scripts to be loaded on the feed form page
      * 
      * @link https://docs.gravityforms.com/include-scripts-styles-with-addon-framework/
+     * @link http://gitlab.annexe.solutions/alotte/stageline/blob/828f8026fe44aaf2441cce4000698dcaf7d86f49/wp-content/plugins/gravity-forms-list-field-date-picker/gravity-forms-list-field-datepicker-addon.php#L15
      *
      * @return void
      */
