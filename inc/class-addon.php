@@ -205,6 +205,7 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
      */
     public function handle_cron()
     {
+        $debug = defined('WP_DEBUG_GF_ERR_CRON') && WP_DEBUG_GF_ERR_CRON === true;
         $forms = \GFAPI::get_forms();
 
         foreach ($forms as $form) {
@@ -214,7 +215,7 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
             }
             foreach ($feeds as $feed) {
 
-                if ($feed['meta']['reminderSent'] === true) {
+                if (!$debug && $feed['meta']['reminderSent'] === true) {
                     continue;
                 }
 
