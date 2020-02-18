@@ -265,7 +265,25 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
                     continue;
                 }
 
-                $entries = \GFAPI::get_entries($form['id']);
+                
+                $search_criteria = [
+                    'status' => 'active',
+                    'field_filters' => [
+                        [
+                            'key' => 'reminderSent',
+                            'value' => null
+                        ]
+                    ]
+                ];
+
+                $paging = ['page_size' => 200];
+
+                $entries = \GFAPI::get_entries(
+                    $form['id'],
+                    $search_criteria,
+                    null,
+                    $paging
+                );
 
                 foreach ($entries as $entry) {
 
