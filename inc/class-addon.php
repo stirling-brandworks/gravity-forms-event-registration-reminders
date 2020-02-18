@@ -172,6 +172,30 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
     }
 
     /**
+     * Whitelist the entry meta keys for confirmations and reminders
+     * 
+     * @see https://docs.gravityforms.com/using-entry-meta-with-add-on-framework/
+     *
+     * @param  array $entry_meta
+     * @param  int   $form_id
+     * @return array $entry_meta
+     */
+    public function get_entry_meta( $entry_meta, $form_id )
+    {
+        $entry_meta['confirmationSent'] = array(
+            'label' => 'Confirmation Sent',
+            'is_numeric' => false
+        );
+
+        $entry_meta['reminderSent'] = array(
+            'label' => 'Reminder Sent',
+            'is_numeric' => false
+        );
+
+        return $entry_meta;
+    }
+
+    /**
      * Handle the form submission
      * 
      * Send the initial registration confirmation email and schedule the reminder.
@@ -185,6 +209,12 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
      */
     public function process_feed( $feed, $entry, $form )
     {
+        gform_update_meta($entry['id'], 'reminderSent', null);
+        $entry['reminderSent'] = null;
+
+        gform_update_meta($entry['id'], 'confirmationSent', null);
+        $entry['confirmationSent'] = null;
+
         $confirmation_enabled = isset($feed['meta']['registrationConfirmationEnabled']) && $feed['meta']['registrationConfirmationEnabled'] == 1;
 
         if ($confirmation_enabled) { 
@@ -200,7 +230,12 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
             );
 
             $email->send();
+
+            gform_update_meta($entry['id'], 'confirmationSent', date('c'));
+            $entry['confirmationSent'] = date('c');
         }
+
+        return $entry;
     }
 
     /**
@@ -246,9 +281,9 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
                     );
 
                     $reminder_email->send();
+
+                    gform_update_meta($entry['id'], 'reminderSent', date('c'));
                 }
-                $feed['meta']['reminderSent'] = true;
-                \GFAPI::update_feed($feed['id'], $feed['meta'], $form['id']);
             }
             
         }
