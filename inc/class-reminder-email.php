@@ -16,7 +16,7 @@ class ReminderEmail extends Email
 
     public function send()
     {
-        wp_mail(
+        return wp_mail(
             $this->to_email,
             sprintf(
                 '%s is coming up!', 

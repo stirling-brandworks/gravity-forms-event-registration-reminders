@@ -300,20 +300,33 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
                     $to_email = $this->get_field_value($form, $entry, $feed['meta']['mappedFields_email']);
                     $to_name = $this->get_field_value($form, $entry, $feed['meta']['mappedFields_firstName']);
 
-                    $reminder_email = new ReminderEmail(
-                        $to_email,
-                        $to_name,
-                        $feed, 
-                        $entry, 
-                        $form
-                    );
-
-                    $reminder_email->send();
-
-                    gform_update_meta($entry['id'], 'reminderSent', date('c'));
+                    try {
+                        $reminder_email = new ReminderEmail(
+                            $to_email,
+                            $to_name,
+                            $feed, 
+                            $entry, 
+                            $form
+                        );
+                        $email_sent = $reminder_email->send();
+                        if (is_wp_error($email_sent)) {
+                            throw new \Exception($email_sent->get_error_message());
+                        } else {
+                            gform_update_meta($entry['id'], 'reminderSent', date('c'));
+                        }
+                    } catch (Exception $e) {
+                        error_log(
+                            sprintf(
+                                'Error sending reminder email. Form ID: %s | Entry ID: %s | Email: %s | Error: %s',
+                                $form['id'],
+                                $entry['id'],
+                                $to_email,
+                                $e->getMessage()
+                            )
+                        );
+                    } 
                 }
             }
-            
         }
     }
 }

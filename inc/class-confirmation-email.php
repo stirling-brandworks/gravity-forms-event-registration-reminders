@@ -10,7 +10,7 @@ class ConfirmationEmail extends Email
     {
         $reminder_date = $this->feed['meta']['reminderDate'];
 
-        wp_mail(
+        return wp_mail(
             $this->to_email,
             sprintf(
                 'Your Registration for %s', 
