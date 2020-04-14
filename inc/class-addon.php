@@ -312,6 +312,9 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
                         if (is_wp_error($email_sent)) {
                             throw new \Exception($email_sent->get_error_message());
                         } else {
+                            if ($debug) {
+                                error_log('Email sent for entry ' . $entry['id'] . ' to ' . $to_email);
+                            }
                             gform_update_meta($entry['id'], 'reminderSent', date('c'));
                         }
                     } catch (Exception $e) {
