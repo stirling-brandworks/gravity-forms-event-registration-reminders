@@ -251,6 +251,9 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
         $forms = \GFAPI::get_forms();
 
         foreach ($forms as $form) {
+            if ($debug) {
+                error_log('Processing form ' . $form['id'] . '...');
+            }
             $feeds = \GFAPI::get_feeds(null, $form['id'], $this->_slug);
             if (!$feeds || is_wp_error($feeds)) {
                 continue;
@@ -268,13 +271,16 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
                 
                 $search_criteria = [
                     'status' => 'active',
-                    'field_filters' => [
-                        [
-                            'key' => 'reminderSent',
-                            'value' => null
-                        ]
-                    ]
+                    'field_filters' => []
                 ];
+
+                if (!$debug) {
+                    $search_criteria['field_filters'][] = [
+                        'key' => 'reminderSent',
+                        'value' => null
+                    ];
+                }
+                
 
                 $paging = ['page_size' => 200];
 
@@ -284,6 +290,10 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
                     null,
                     $paging
                 );
+
+                if ($debug) {
+                    error_log('Found ' . count($entries) . ' for ' . $form['id'] . '. Sending...');
+                }
 
                 foreach ($entries as $entry) {
 
