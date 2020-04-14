@@ -4,16 +4,6 @@ namespace StirlingBrandworks\GFEventRegistrationRemindersAddOn;
 
 class ReminderEmail extends Email
 {
-
-    protected function get_reminder_note_text()
-    {
-        $reminder_note = $this->feed['meta']['reminderNote'];
-        if (!$reminder_note) { 
-            return '';
-        }
-        return sprintf("Note: %s\r\n\r\n\r\n\r\n", $reminder_note);
-    }
-
     public function send()
     {
         return wp_mail(

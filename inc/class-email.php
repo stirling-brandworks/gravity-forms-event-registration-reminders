@@ -24,6 +24,15 @@ abstract class Email
         $this->reply_to_email = $this->feed['meta']['replyToEmail'];
     }
 
+    protected function get_reminder_note_text()
+    {
+        $reminder_note = $this->feed['meta']['reminderNote'];
+        if (!$reminder_note) { 
+            return '';
+        }
+        return sprintf("Note: %s\r\n\r\n\r\n\r\n", $reminder_note);
+    }
+
     public function get_submitted_fields_table_html()
     {
         return \GFCommon::get_submitted_fields(

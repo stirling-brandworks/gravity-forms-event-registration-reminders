@@ -135,10 +135,10 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
                         'required'   => 1,
                     ],
                     [
-                        'label'   => esc_html__('Reminder Note', 'event-registration-reminders'),
+                        'label'   => esc_html__('Note', 'event-registration-reminders'),
                         'type'    => 'textarea',
                         'name'    => 'reminderNote',
-                        'tooltip' => esc_html__('Optionally include a note to send in the reminder email.', 'event-registration-reminders'),
+                        'tooltip' => esc_html__('Optionally include a note to send in the emails.', 'event-registration-reminders'),
                     ],
                     // @link https://github.com/gravityforms/event-registration-reminders/blob/6ebc6f06a6da3120ac94caef00779f2fab34e8a6/class-gfevent-registration-reminders.php#L218
                     [
