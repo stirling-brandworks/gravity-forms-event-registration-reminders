@@ -298,7 +298,14 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
                 foreach ($entries as $entry) {
 
                     $to_email = $this->get_field_value($form, $entry, $feed['meta']['mappedFields_email']);
-                    $to_name = $this->get_field_value($form, $entry, $feed['meta']['mappedFields_firstName']);
+
+                    // If someone accidentally includes the "Full Name" field for firstName, it will error out
+                    // so we check to make sure it's a string, otherwise just empty it out.
+                    if (is_string($this->get_field_value($form, $entry, $feed['meta']['mappedFields_firstName']))) {
+                        $to_name = $this->get_field_value($form, $entry, $feed['meta']['mappedFields_firstName']);
+                    } else {
+                        $to_name = '';
+                    }
 
                     try {
                         $reminder_email = new ReminderEmail(
