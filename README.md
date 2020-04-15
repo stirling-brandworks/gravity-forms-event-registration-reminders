@@ -1,5 +1,6 @@
 # Event Registration Reminders for Gravity Forms
 
+![admin screenshot](screenshot.png)
 
 ## Overview
 Gravity Forms add-on for email reminders when using forms for event registration.
