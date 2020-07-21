@@ -184,12 +184,12 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
     {
         $entry_meta['confirmationSent'] = array(
             'label' => 'Confirmation Sent',
-            'is_numeric' => false
+            'is_numeric' => true
         );
 
         $entry_meta['reminderSent'] = array(
             'label' => 'Reminder Sent',
-            'is_numeric' => false
+            'is_numeric' => true
         );
 
         return $entry_meta;
@@ -209,11 +209,11 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
      */
     public function process_feed( $feed, $entry, $form )
     {
-        gform_update_meta($entry['id'], 'reminderSent', null);
-        $entry['reminderSent'] = null;
+        gform_update_meta($entry['id'], 'reminderSent', 0);
+        $entry['reminderSent'] = 0;
 
-        gform_update_meta($entry['id'], 'confirmationSent', null);
-        $entry['confirmationSent'] = null;
+        gform_update_meta($entry['id'], 'confirmationSent', 0);
+        $entry['confirmationSent'] = 0;
 
         $confirmation_enabled = isset($feed['meta']['registrationConfirmationEnabled']) && $feed['meta']['registrationConfirmationEnabled'] == 1;
 
@@ -231,8 +231,8 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
 
             $email->send();
 
-            gform_update_meta($entry['id'], 'confirmationSent', date('c'));
-            $entry['confirmationSent'] = date('c');
+            gform_update_meta($entry['id'], 'confirmationSent', 1);
+            $entry['confirmationSent'] = 1;
         }
 
         return $entry;
@@ -277,7 +277,7 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
                 if (!$debug) {
                     $search_criteria['field_filters'][] = [
                         'key' => 'reminderSent',
-                        'value' => null
+                        'value' => 0
                     ];
                 }
                 
@@ -322,7 +322,7 @@ class GFEventRegistrationRemindersAddOn extends \GFFeedAddOn
                             if ($debug) {
                                 error_log('Email sent for entry ' . $entry['id'] . ' to ' . $to_email);
                             }
-                            gform_update_meta($entry['id'], 'reminderSent', date('c'));
+                            gform_update_meta($entry['id'], 'reminderSent', 1);
                         }
                     } catch (Exception $e) {
                         error_log(
